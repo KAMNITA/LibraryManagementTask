@@ -4,6 +4,7 @@ public class Student extends User {
     private static final int maxBooks = 3;
     private static final int borrowDays = 14;
     private static final double finePerDay = 0.50;
+
     public Student(String name, String userId, String email) {
         super(name, userId, email);
     }
@@ -13,11 +14,17 @@ public class Student extends User {
     }
 
     @Override
-    public int getMaxBooks() { return maxBooks; }
+    public int getMaxBooks() {
+        return maxBooks;
+    }
 
     @Override
-    public int getBorrowDays() { return borrowDays; }
+    public int getBorrowDays() {
+        return borrowDays;
+    }
 
     @Override
-    public double getFinePerDay() { return finePerDay; }
+    public double getFinePerDay() {
+        return finePerDay;
+    }
 }

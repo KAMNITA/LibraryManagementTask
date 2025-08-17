@@ -29,15 +29,17 @@ public abstract class User {
     }
 
     public abstract int getMaxBooks();
+
     public abstract int getBorrowDays();
+
     public abstract double getFinePerDay();
 
     public boolean canBorrow() {
         return this.borrowedBooks.size() < getMaxBooks();
     }
 
-    public boolean Borrow(String bookName){
-        if( this.borrowedBooks.size() < this.getMaxBooks()){
+    public boolean Borrow(String bookName) {
+        if (this.borrowedBooks.size() < this.getMaxBooks()) {
             this.borrowedBooks.add(bookName);
             return true;
         }

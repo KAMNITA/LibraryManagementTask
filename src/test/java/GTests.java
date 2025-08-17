@@ -6,22 +6,16 @@ import org.junit.jupiter.api.Test;
 public class GTests {
 
     @Test
-    void checkOverdue(){
+    void checkOverdue() {
         Library lib = new Library();
-        lib.addBook("GoneWithTheWind","MMitchel","9780708985489","novel"   );
-        lib.registerUser("Poul", "1337ABC", "1234@gmail.com", LibraryOperations.UserType.fromString("guest") );
-        lib.borrowBook("1337ABC","9780708985489" );
-        lib.getBorrowingHistory().forEach(System.out::println);
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.goToNextDay();
-        lib.returnBook("1337ABC","9780708985489" );
+        lib.addBook("GoneWithTheWind", "MMitchel", "9780708985489", "novel");
+        lib.registerUser("Poul", "1337ABC", "1234@gmail.com", LibraryOperations.UserType.fromString("guest"));
+        lib.borrowBook("1337ABC", "9780708985489");
+//        lib.getBorrowingHistory().forEach(System.out::println);
+        for (var i = 0; i < 10; i++) {
+            lib.goToNextDay();
+        }
+        lib.returnBook("1337ABC", "9780708985489");
         lib.getBorrowingHistory().forEach(System.out::println);
 
 

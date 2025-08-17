@@ -12,14 +12,8 @@ public class Book {
         this.availability = true;
         this.dueTime = 0;
     }
-//    public Book(String name, String author, int dueTime) {
-//        this.name = name;
-//        this.author = author;
-//        this.availability = true;
-//        this.dueTime = dueTime;
-//    }
 
-    public void decreaseDueTime(){
+    public void decreaseDueTime() {
         dueTime--;
     }
 
@@ -40,7 +34,6 @@ public class Book {
     }
 
 
-
     public String getAuthor() {
         return author;
     }
@@ -58,7 +51,6 @@ public class Book {
                 ", dueTime=" + dueTime +
                 '}';
     }
-
 
 
     public int getDueTime() {

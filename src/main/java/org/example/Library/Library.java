@@ -10,7 +10,7 @@ public class Library implements LibraryOperations {
     private Map<String, Book> books;
     private Map<String, User> users;
     private List<BorrowingRecord> borrowingHistory;
-    private Set< Book> overdueBooks;
+    private Set<Book> overdueBooks;
     private Map<String, Set<String>> titleToIsbns = new HashMap<>();
     private Set<String> genres;
 
@@ -34,11 +34,11 @@ public class Library implements LibraryOperations {
 
     @Override
     public void addBook(String title, String author, String isbn, String genre) {
-        if(books.containsKey(isbn)){
+        if (books.containsKey(isbn)) {
             return;
         }
         Book book = new Book(title, author);
-        this.books.put(isbn,book);
+        this.books.put(isbn, book);
         this.genres.add(genre);
         titleToIsbns.computeIfAbsent(title, k -> new HashSet<>()).add(isbn);
 
@@ -47,7 +47,7 @@ public class Library implements LibraryOperations {
     @Override
     public boolean removeBook(String isbn) {
 
-        if (this.books.containsKey(isbn) && this.books.get(isbn).isAvailable() ) {
+        if (this.books.containsKey(isbn) && this.books.get(isbn).isAvailable()) {
 
             this.titleToIsbns.remove(this.books.get(isbn).getName());
             this.books.remove(isbn);
@@ -68,10 +68,10 @@ public class Library implements LibraryOperations {
     public Set<Book> findBookByName(String name) {//все книги с одинаковыми названиями
         Set<String> isbns = titleToIsbns.get(name);
         Set<Book> res = new HashSet<>();
-        if(isbns == null){
+        if (isbns == null) {
             return Set.of();
         }
-        for(var s : isbns){
+        for (var s : isbns) {
             Book book = this.books.get(s);
             if (book != null) {
                 res.add(book);
@@ -84,7 +84,10 @@ public class Library implements LibraryOperations {
     @Override
     public Set<Book> findBookByAuthor(String author) {//считаем, что поиск по автору происходит редко, поэтому для него не делаем мапу
         Set<Book> res = new HashSet<>();
-        this.books.forEach((k, v)->{if(Objects.equals(v.getAuthor(), author)){res.add(v);}
+        this.books.forEach((k, v) -> {
+            if (Objects.equals(v.getAuthor(), author)) {
+                res.add(v);
+            }
         });
         return res;
     }
@@ -108,12 +111,13 @@ public class Library implements LibraryOperations {
     @Override
     public void goToNextDay() {
         ++date;
-        books.forEach((str,b)->{if(!b.isAvailable()){
-            b.decreaseDueTime();
-            if(b.getDueTime()<0){
-                overdueBooks.add( b);
+        books.forEach((str, b) -> {
+            if (!b.isAvailable()) {
+                b.decreaseDueTime();
+                if (b.getDueTime() < 0) {
+                    overdueBooks.add(b);
+                }
             }
-        }
         });
     }
 
@@ -150,7 +154,7 @@ public class Library implements LibraryOperations {
             user.getBorrowedBooks().add(isbn);
             this.books.get(isbn).setDueTime(user.getBorrowDays());
         } else {
-            fine = book.getDueTime()<0? Math.abs(book.getDueTime())*user.getFinePerDay():0;
+            fine = book.getDueTime() < 0 ? Math.abs(book.getDueTime()) * user.getFinePerDay() : 0;
             user.getBorrowedBooks().remove(isbn);
         }
 
@@ -190,6 +194,7 @@ public class Library implements LibraryOperations {
     public void setGenres(Set<String> genres) {
         this.genres = genres;
     }
+
     public Map<String, Set<String>> getTitleToIsbns() {
         return titleToIsbns;
     }
