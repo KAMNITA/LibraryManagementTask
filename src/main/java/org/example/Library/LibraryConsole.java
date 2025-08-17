@@ -1,23 +1,37 @@
 package org.example.Library;
 
+import com.sun.net.httpserver.Authenticator;
+
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LibraryConsole {
-    final static Pattern patternOfOne = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s*$");
-    final static Pattern patternOfTwo = Pattern.compile("\\s*([a-zA-Z0-9]+)(\\s+-[a-zA-Z0-9]+)(\\s+[a-zA-Z0-9]+)\\s*$");
-    final static Pattern patternOfThree = Pattern.compile("\\s*([a-zA-Z0-9]+)(\\s+-[a-zA-Z0-9]+)(\\s+[a-zA-Z0-9]+)\\s*$");
-    final static Pattern patternOfFour = Pattern.compile("\\s*([a-zA-Z0-9]+)(\\s+-[a-zA-Z0-9]+)(\\s+[a-zA-Z0-9]+)(\\s+[a-zA-Z0-9]+)\\s*$");
+    private final static Pattern patternOfOne = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s*$");
+    private final static Pattern patternOfTwo = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)([a-zA-Z0-9]+)\\s*$");
+    private final static Pattern patternOfThree = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
+    private final static Pattern patternOfFour = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
 
-    private Library library;
+    private final Library library;
     private final Scanner scanner = new Scanner(System.in);
+
+
+    public LibraryConsole() {
+        this.library = new Library();
+    }
+
 
     public void run() {
         while (true) {
             showMenu();
-            int choice = getIntInput("Enter choice: ");
+            int choice;
+            try {
+                choice = getIntInput("Enter choice: ");
+            } catch (NoSuchElementException e) {
+                System.out.println("End of file");
+                return;
+            }
 
             switch (choice) {
                 case 1:
@@ -43,16 +57,29 @@ public class LibraryConsole {
             System.out.println("1. Add Book");
             System.out.println("2. Remove Book");
             System.out.println("3. Find Book by ISBN");
-            System.out.println("4. Find Book by Author");
-            System.out.println("5. Find Book by Title");
-            System.out.println("6. Search Books");
-            System.out.println("7. List All Books");
+            System.out.println("4. Find Books by Author");
+            System.out.println("5. Find Books by Title");
+            System.out.println("6. Show All Books");
             System.out.println("0. Back to Main Menu");
 
-            int choice = getIntInput("Enter choice: ");
-            String line = scanner.nextLine();
+            int choice;
+            String line;
+            try {
+                choice = getIntInput("Enter choice: ");
+            } catch (NoSuchElementException e) {
+                System.out.println("End of file");
+                return;
+            }
+
             switch (choice) {
                 case 1 -> {
+                    try {
+
+                        line = scanner.nextLine();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("End of file");
+                        return;
+                    }
                     Matcher matcher = patternOfFour.matcher(line);
                     if (matcher.matches()) {
                         library.addBook(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
@@ -61,46 +88,72 @@ public class LibraryConsole {
                     }
                 }
                 case 2 -> {
+                    try {
+
+                        line = scanner.nextLine();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("End of file");
+                        return;
+                    }
                     Matcher matcher = patternOfOne.matcher(line);
                     if (matcher.matches()) {
-                        library.removeBook(matcher.group(1));
+                        if(library.removeBook(matcher.group(1))){
+                            System.out.println("Remove successful");
+                        }else{
+                            System.out.println("This book is in use or does not exist");
+
+                        }
                     } else {
                         System.out.println("Invalid input");
                     }
                 }
                 case 3 -> {
+                    try {
+
+                        line = scanner.nextLine();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("End of file");
+                        return;
+                    }
                     Matcher matcher = patternOfOne.matcher(line);
                     if (matcher.matches()) {
-                        library.findBook(matcher.group(1));
+                        System.out.println( library.findBook(matcher.group(1)));
                     } else {
                         System.out.println("Invalid input");
                     }
                 }
                 case 4 -> {
+                    try {
+
+                        line = scanner.nextLine();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("End of file");
+                        return;
+                    }
                     Matcher matcher = patternOfOne.matcher(line);
                     if (matcher.matches()) {
-                        library.findBookByAuthor(matcher.group(1));
+                        System.out.println( library.findBookByAuthor(matcher.group(1)));
                     } else {
                         System.out.println("Invalid input");
                     }
                 }
                 case 5 -> {
+                    try {
+
+                        line = scanner.nextLine();
+                    } catch (NoSuchElementException e) {
+                        System.out.println("End of file");
+                        return;
+                    }
                     Matcher matcher = patternOfOne.matcher(line);
                     if (matcher.matches()) {
-                        library.findBookByName(matcher.group(1));
+                        System.out.println(library.findBookByName(matcher.group(1)));
                     } else {
                         System.out.println("Invalid input");
                     }
                 }
-                case 6 -> {
-                    Matcher matcher = patternOfOne.matcher(line);
-                    if (matcher.matches()) {
-                        library.searchBooks(matcher.group(1));
-                    } else {
-                        System.out.println("Invalid input of search Books");
-                    }
-                }
-                case 7 -> System.out.println(library.getBooks());
+
+                case 6 -> System.out.println(library.getBooks());
 
                 case 0 -> {
                     return;
@@ -118,8 +171,16 @@ public class LibraryConsole {
             System.out.println("3. List All Users");
             System.out.println("0. Back to Main Menu");
 
-            int choice = getIntInput("Enter choice: ");
-            String line = scanner.nextLine();
+            int choice;
+            String line;
+            try {
+                choice = getIntInput("Enter choice: ");
+
+                line = scanner.nextLine();
+            } catch (NoSuchElementException e) {
+                System.out.println("End of file");
+                return;
+            }
 
             switch (choice) {
                 case 1 -> {
@@ -159,9 +220,17 @@ public class LibraryConsole {
             System.out.println("3. List Overdue Books");
             System.out.println("4. View Borrowing History");
             System.out.println("0. Back to Main Menu");
+            int choice;
+            String line;
+            try {
+                choice = getIntInput("Enter choice: ");
 
-            int choice = getIntInput("Enter choice: ");
-            String line = scanner.nextLine();
+                line = scanner.nextLine();
+            } catch (NoSuchElementException e) {
+                System.out.println("End of file");
+                return;
+            }
+
             switch (choice) {
                 case 1 -> {
                     Matcher matcher = patternOfTwo.matcher(line);

@@ -7,6 +7,7 @@ import org.example.Users.User;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public interface LibraryOperations {
@@ -42,17 +43,15 @@ public interface LibraryOperations {
     void addBook(String title, String author, String isbn, String genre);
     boolean removeBook(String isbn);
     Book findBook(String isbn);
-    List<Book> searchBooks(String query);
-
     void registerUser(String name, String userId, String email, UserType type);
     User findUser(String userId);
 
     boolean borrowBook(String userId, String isbn);
     boolean returnBook(String userId, String isbn);
 
-    public Book findBookByAuthor(String isbn);
+    public Set<Book> findBookByAuthor(String isbn);
 
-    public Book findBookByName(String isbn);
+    public Set<Book> findBookByName(String isbn);
 
     List<BorrowingRecord> getOverdueBooks();
 }
