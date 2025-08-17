@@ -6,7 +6,7 @@ public class Book {
     private boolean availability;
     public Book(String name, String author){
         this.name=name;
-        this.name = author;
+        this.author = author;
         this.availability=true;
     }
     public boolean isAvailable(){
@@ -23,6 +23,23 @@ public class Book {
 
     public void setAvailability(boolean availability) {
         this.availability = availability;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", availability=" + availability +
+                '}';
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
 //    public String getGenre() {

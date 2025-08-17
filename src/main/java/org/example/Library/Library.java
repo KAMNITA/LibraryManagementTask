@@ -10,26 +10,35 @@ public class Library implements LibraryOperations {
     private Map<String, Book> books;
     private Map<String, User> users;
     private List<BorrowingRecord> borrowingHistory;
+
+
+
+    private Map<String, Set<String>> titleToIsbns = new HashMap<>();
     private Set<String> genres;
 
     public Library() {
-        genres = new HashSet<>();
-        books = new HashMap<>();
-        users = new HashMap<>();
-        borrowingHistory = new ArrayList<>();
+        this.genres = new HashSet<>();
+        this.books = new HashMap<>();
+        this.users = new HashMap<>();
+        this.borrowingHistory = new ArrayList<>();
 
     }
 
     @Override
     public void addBook(String title, String author, String isbn, String genre) {
-        books.put(isbn, new Book(title, author));
-        genres.add(genre);
+        Book book = new Book(title, author);
+        this.books.put(isbn,book );
+        this.genres.add(genre);
+        titleToIsbns.computeIfAbsent(title, k -> new HashSet<>()).add(isbn);
+
     }
 
     @Override
     public boolean removeBook(String isbn) {
-        if (books.get(isbn).isAvailable()) {
-            books.remove(isbn);
+
+        if (this.books.containsKey(isbn) && this.books.get(isbn).isAvailable() ) {
+            this.books.remove(isbn);
+            this.titleToIsbns.get(this.books.get(isbn).getAuthor()).remove(isbn);
             return true;
         }
         return false;
@@ -37,17 +46,32 @@ public class Library implements LibraryOperations {
 
     @Override
     public Book findBook(String isbn) {
-        return null;
+        return this.books.get(isbn);
     }
 
     @Override
-    public Book findBookByAuthor(String isbn) {
-        return null;
+    public Set<Book> findBookByName(String name) {//все книги с одинаковыми названиями
+        Set<String> isbns = titleToIsbns.get(name);
+        Set<Book> res = new HashSet<>();
+        if(isbns == null){
+            return Set.of();
+        }
+        for(var s : isbns){
+            Book book = this.books.get(s);
+            if (book != null) {
+                res.add(book);
+            }
+        }
+        return res;
+
     }
 
     @Override
-    public Book findBookByName(String isbn) {
-        return null;
+    public Set<Book> findBookByAuthor(String author) {//считаем, что поиск по автору происходит редко, поэтому для него не делаем мапу
+        Set<Book> res = new HashSet<>();
+        this.books.forEach((k, v)->{if(Objects.equals(v.getAuthor(), author)){res.add(v);}
+        });
+        return res;
     }
 
     @Override
@@ -55,10 +79,6 @@ public class Library implements LibraryOperations {
         return List.of();
     }
 
-    @Override
-    public List<Book> searchBooks(String query) {
-        return List.of();
-    }
 
     @Override
     public void registerUser(String name, String userId, String email, UserType type) {
@@ -67,7 +87,7 @@ public class Library implements LibraryOperations {
 
     @Override
     public User findUser(String userId) {
-        return users.get(userId);
+        return this.users.get(userId);
     }
 
     @Override
@@ -81,8 +101,8 @@ public class Library implements LibraryOperations {
     }
 
     private boolean processBookTransaction(String userId, String isbn, boolean isBorrowing) {
-        User user = users.get(userId);
-        Book book = books.get(isbn);
+        User user = this.users.get(userId);
+        Book book = this.books.get(isbn);
         if (user == null || book == null) {
             return false;
         }
@@ -104,13 +124,13 @@ public class Library implements LibraryOperations {
             user.getBorrowedBooks().remove(isbn);
         }
 
-        borrowingHistory.add(new BorrowingRecord(book, user, LocalDate.now(), isBorrowing));
+        this.borrowingHistory.add(new BorrowingRecord(book, user, LocalDate.now(), isBorrowing));
 
         return true;
     }
 
     public Map<String, Book> getBooks() {
-        return books;
+        return this.books;
     }
 
     public void setBooks(Map<String, Book> books) {
@@ -118,7 +138,7 @@ public class Library implements LibraryOperations {
     }
 
     public Map<String, User> getUsers() {
-        return users;
+        return this.users;
     }
 
     public void setUsers(Map<String, User> users) {
@@ -126,7 +146,7 @@ public class Library implements LibraryOperations {
     }
 
     public List<BorrowingRecord> getBorrowingHistory() {
-        return borrowingHistory;
+        return this.borrowingHistory;
     }
 
     public void setBorrowingHistory(List<BorrowingRecord> borrowingHistory) {
@@ -134,10 +154,17 @@ public class Library implements LibraryOperations {
     }
 
     public Set<String> getGenres() {
-        return genres;
+        return this.genres;
     }
 
     public void setGenres(Set<String> genres) {
         this.genres = genres;
+    }
+    public Map<String, Set<String>> getTitleToIsbns() {
+        return titleToIsbns;
+    }
+
+    public void setTitleToIsbns(Map<String, Set<String>> titleToIsbns) {
+        this.titleToIsbns = titleToIsbns;
     }
 }
