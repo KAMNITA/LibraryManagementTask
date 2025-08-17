@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class LibraryConsole {
     private final static Pattern patternOfOne = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s*$");
-    private final static Pattern patternOfTwo = Pattern.compile(  "\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
+    private final static Pattern patternOfTwo = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
     private final static Pattern patternOfThree = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
     private final static Pattern patternOfFour = Pattern.compile("\\s*([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s+([a-zA-Z0-9]+)\\s*$");
 
@@ -252,9 +252,9 @@ public class LibraryConsole {
                     }
                     Matcher matcher = patternOfTwo.matcher(line);
                     if (matcher.matches()) {
-                        if(library.borrowBook(matcher.group(1), matcher.group(2))){
+                        if (library.borrowBook(matcher.group(1), matcher.group(2))) {
                             System.out.println("Success borrow ");
-                        }else{
+                        } else {
                             System.out.println("invalid borrow ");
                         }
                     } else {
@@ -271,20 +271,22 @@ public class LibraryConsole {
                     Matcher matcher = patternOfTwo.matcher(line);
                     if (matcher.matches()) {
 
-                        if(library.returnBook(matcher.group(1), matcher.group(2))){
+                        if (library.returnBook(matcher.group(1), matcher.group(2))) {
                             System.out.println("Success return ");
-                        }else{
+                        } else {
                             System.out.println("invalid return ");
                         }
                     } else {
                         System.out.println("Invalid input ");
                     }
                 }
-                case 3 ->System.out.println(library.getOverdueBooks());
+                case 3 -> System.out.println(library.getOverdueBooks());
                 case 4 -> {
-                        System.out.println(library.getBorrowingHistory());
+                    System.out.println(library.getBorrowingHistory());
                 }
-                case 5 ->{library.goToNextDay();}
+                case 5 -> {
+                    library.goToNextDay();
+                }
                 case 0 -> {
                     return;
                 }

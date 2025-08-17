@@ -15,11 +15,17 @@ public class Faculty extends User {
     }
 
     @Override
-    public int getMaxBooks() { return maxBooks; }
+    public int getMaxBooks() {
+        return maxBooks;
+    }
 
     @Override
-    public int getBorrowDays() { return borrowDays; }
+    public int getBorrowDays() {
+        return borrowDays;
+    }
 
     @Override
-    public double getFinePerDay() { return finePerDay; }
+    public double getFinePerDay() {
+        return finePerDay;
+    }
 }

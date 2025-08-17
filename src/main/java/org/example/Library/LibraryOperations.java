@@ -25,12 +25,12 @@ public interface LibraryOperations {
         public User createUser(String name, String userId, String email) {
             return creator.get().setBaseData(name, userId, email);
         }
+
         public static UserType fromString(String typeStr) {
             if (typeStr == null || typeStr.isEmpty()) {
                 throw new IllegalArgumentException("UserType cannot be null or empty");
             }
 
-            // Игнорируем регистр при сравнении (FACULTY = faculty = Faculty)
             String normalized = typeStr.trim().toUpperCase();
 
             try {
@@ -40,13 +40,21 @@ public interface LibraryOperations {
             }
         }
     }
+
     void addBook(String title, String author, String isbn, String genre);
+
     boolean removeBook(String isbn);
+
     Book findBook(String isbn);
+
     void registerUser(String name, String userId, String email, UserType type);
+
     User findUser(String userId);
+
     void goToNextDay();
+
     boolean borrowBook(String userId, String isbn);
+
     boolean returnBook(String userId, String isbn);
 
     public Set<Book> findBookByAuthor(String isbn);

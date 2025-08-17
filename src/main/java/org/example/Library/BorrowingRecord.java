@@ -11,18 +11,20 @@ public class BorrowingRecord {//class for logs
     private Book bookName;
     private boolean isBorrowing;//одалживает или возвращает
     private final double duty;
-    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing,double duty){
+
+    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing, double duty) {
         this.bookName = bookName;
-        this.user=user;
+        this.user = user;
         this.date = date;
-        this.isBorrowing=isBorrowing;
-        this.duty=duty;
+        this.isBorrowing = isBorrowing;
+        this.duty = duty;
     }
-    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing ){
+
+    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing) {
         this.bookName = bookName;
-        this.user=user;
+        this.user = user;
         this.date = date;
-        this.isBorrowing=isBorrowing;
+        this.isBorrowing = isBorrowing;
         this.duty = 0;
     }
 
@@ -65,7 +67,7 @@ public class BorrowingRecord {//class for logs
                 "date=" + date +
                 ", user=" + user +
                 ", bookName=" + bookName +
-                ", isBorrowing=" + isBorrowing + (duty==0 ?"": " user duty for this book = "+ duty + " денег ")+
+                ", isBorrowing=" + isBorrowing + (duty == 0 ? "" : " user duty for this book = " + duty + " денег ") +
                 '}';
     }
 }
