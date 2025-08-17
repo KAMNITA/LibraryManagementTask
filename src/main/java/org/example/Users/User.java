@@ -76,4 +76,13 @@ public abstract class User {
     public void setBorrowedBooks(List<String> borrowedBooks) {
         this.borrowedBooks = borrowedBooks;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", userId='" + userId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

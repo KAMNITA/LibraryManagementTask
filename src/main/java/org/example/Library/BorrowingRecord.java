@@ -6,22 +6,32 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class BorrowingRecord {//class for logs
-    private LocalDate date;
+    private int date;//для упрощения тестирования - int
     private User user;
     private Book bookName;
-    private boolean isBorrowing;
-    public BorrowingRecord(Book bookName, User user, LocalDate date, boolean isBorrowing){
+    private boolean isBorrowing;//одалживает или возвращает
+    private final double duty;
+    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing,double duty){
         this.bookName = bookName;
         this.user=user;
         this.date = date;
         this.isBorrowing=isBorrowing;
+        this.duty=duty;
+    }
+    public BorrowingRecord(Book bookName, User user, int date, boolean isBorrowing ){
+        this.bookName = bookName;
+        this.user=user;
+        this.date = date;
+        this.isBorrowing=isBorrowing;
+        this.duty = 0;
     }
 
-    public LocalDate getDate() {
+
+    public int getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(int date) {
         this.date = date;
     }
 
@@ -47,5 +57,15 @@ public class BorrowingRecord {//class for logs
 
     public void setBorrowing(boolean Borrowing) {
         isBorrowing = Borrowing;
+    }
+
+    @Override
+    public String toString() {
+        return " BorrowingRecord{" +
+                "date=" + date +
+                ", user=" + user +
+                ", bookName=" + bookName +
+                ", isBorrowing=" + isBorrowing + (duty==0 ?"": " user duty for this book = "+ duty + " денег ")+
+                '}';
     }
 }

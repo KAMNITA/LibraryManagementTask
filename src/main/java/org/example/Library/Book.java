@@ -4,12 +4,26 @@ public class Book {
     private String name;
     private String author;
     private boolean availability;
-    public Book(String name, String author){
-        this.name=name;
+    private int dueTime;
+
+    public Book(String name, String author) {
+        this.name = name;
         this.author = author;
-        this.availability=true;
+        this.availability = true;
+        this.dueTime = 0;
     }
-    public boolean isAvailable(){
+//    public Book(String name, String author, int dueTime) {
+//        this.name = name;
+//        this.author = author;
+//        this.availability = true;
+//        this.dueTime = dueTime;
+//    }
+
+    public void decreaseDueTime(){
+        dueTime--;
+    }
+
+    public boolean isAvailable() {
         return availability;
     }
 
@@ -25,14 +39,7 @@ public class Book {
         this.availability = availability;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "name='" + name + '\'' +
-                ", author='" + author + '\'' +
-                ", availability=" + availability +
-                '}';
-    }
+
 
     public String getAuthor() {
         return author;
@@ -40,6 +47,26 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "name='" + name + '\'' +
+                ", author='" + author + '\'' +
+                ", availability=" + availability +
+                ", dueTime=" + dueTime +
+                '}';
+    }
+
+
+
+    public int getDueTime() {
+        return dueTime;
+    }
+
+    public void setDueTime(int dueTime) {
+        this.dueTime = dueTime;
     }
 
 //    public String getGenre() {
