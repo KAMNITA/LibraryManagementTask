@@ -6,13 +6,11 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class Library implements LibraryOperations {
-
+    private static int date = 0;//для простоты проверки
     private Map<String, Book> books;
     private Map<String, User> users;
     private List<BorrowingRecord> borrowingHistory;
-
-
-
+    private Set< Book> overdueBooks;
     private Map<String, Set<String>> titleToIsbns = new HashMap<>();
     private Set<String> genres;
 
@@ -20,14 +18,27 @@ public class Library implements LibraryOperations {
         this.genres = new HashSet<>();
         this.books = new HashMap<>();
         this.users = new HashMap<>();
+        this.overdueBooks = new HashSet<>();
         this.borrowingHistory = new ArrayList<>();
 
     }
 
+    public static int getDate() {
+        return date;
+    }
+
+    public static void setDate(int date) {
+        Library.date = date;
+    }
+
+
     @Override
     public void addBook(String title, String author, String isbn, String genre) {
+        if(books.containsKey(isbn)){
+            return;
+        }
         Book book = new Book(title, author);
-        this.books.put(isbn,book );
+        this.books.put(isbn,book);
         this.genres.add(genre);
         titleToIsbns.computeIfAbsent(title, k -> new HashSet<>()).add(isbn);
 
@@ -37,8 +48,12 @@ public class Library implements LibraryOperations {
     public boolean removeBook(String isbn) {
 
         if (this.books.containsKey(isbn) && this.books.get(isbn).isAvailable() ) {
+
+            this.titleToIsbns.remove(this.books.get(isbn).getName());
             this.books.remove(isbn);
             this.titleToIsbns.get(this.books.get(isbn).getAuthor()).remove(isbn);
+            this.overdueBooks.remove(isbn);
+
             return true;
         }
         return false;
@@ -75,8 +90,8 @@ public class Library implements LibraryOperations {
     }
 
     @Override
-    public List<BorrowingRecord> getOverdueBooks() {//просроченные книги
-        return List.of();
+    public Set<Book> getOverdueBooks() {//просроченные книги
+        return overdueBooks;
     }
 
 
@@ -91,6 +106,18 @@ public class Library implements LibraryOperations {
     }
 
     @Override
+    public void goToNextDay() {
+        ++date;
+        books.forEach((str,b)->{if(!b.isAvailable()){
+            b.decreaseDueTime();
+            if(b.getDueTime()<0){
+                overdueBooks.add( b);
+            }
+        }
+        });
+    }
+
+    @Override
     public boolean borrowBook(String userId, String isbn) {
         return processBookTransaction(userId, isbn, true);
     }
@@ -101,6 +128,7 @@ public class Library implements LibraryOperations {
     }
 
     private boolean processBookTransaction(String userId, String isbn, boolean isBorrowing) {
+        double fine = 0;
         User user = this.users.get(userId);
         Book book = this.books.get(isbn);
         if (user == null || book == null) {
@@ -120,11 +148,13 @@ public class Library implements LibraryOperations {
         book.setAvailability(!isBorrowing);
         if (isBorrowing) {
             user.getBorrowedBooks().add(isbn);
+            this.books.get(isbn).setDueTime(user.getBorrowDays());
         } else {
+            fine = book.getDueTime()<0? Math.abs(book.getDueTime())*user.getFinePerDay():0;
             user.getBorrowedBooks().remove(isbn);
         }
 
-        this.borrowingHistory.add(new BorrowingRecord(book, user, LocalDate.now(), isBorrowing));
+        this.borrowingHistory.add(new BorrowingRecord(book, user, date, isBorrowing, fine));
 
         return true;
     }

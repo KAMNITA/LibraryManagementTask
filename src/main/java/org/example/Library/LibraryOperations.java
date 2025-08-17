@@ -45,7 +45,7 @@ public interface LibraryOperations {
     Book findBook(String isbn);
     void registerUser(String name, String userId, String email, UserType type);
     User findUser(String userId);
-
+    void goToNextDay();
     boolean borrowBook(String userId, String isbn);
     boolean returnBook(String userId, String isbn);
 
@@ -53,5 +53,5 @@ public interface LibraryOperations {
 
     public Set<Book> findBookByName(String isbn);
 
-    List<BorrowingRecord> getOverdueBooks();
+    Set<Book> getOverdueBooks();
 }
